@@ -1,5 +1,7 @@
 # Nuxt Minimal Starter
 
+A Nuxt web app for managing a student canteen wallet system. Students can buy items using their student ID, and add funds to their account by paying at the cashier.
+
 Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
 
 ## Setup
