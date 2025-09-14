@@ -1,26 +1,3 @@
-<template>
-</template>
-<!-- <template>
-  <UContainer class="flex justify-center py-10">
-    <UCard class="w-full max-w-sm">
-      <template #header>
-        <h1 class="text-xl font-bold">Login</h1>
-      </template>
-      <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
-        <UFormField label="Email" name="email">
-          <UInput v-model="state.email" class="w-full" />
-        </UFormField>
-
-        <UFormField label="Password" name="password">
-          <UInput v-model="state.password" type="password" class="w-full" />
-        </UFormField>
-
-        <UButton type="submit" class="justify-center w-full"> Submit </UButton>
-      </UForm>
-    </UCard>
-  </UContainer>
-</template>
-
 <script setup lang="ts">
 import * as z from 'zod'
 import type { FormSubmitEvent } from '@nuxt/ui'
@@ -33,13 +10,56 @@ const schema = z.object({
 type Schema = z.output<typeof schema>
 
 const state = reactive<Partial<Schema>>({
-  email: undefined,
-  password: undefined,
+  email: '',
+  password: '',
 })
 
+const supabase = useSupabaseClient()
 const toast = useToast()
+const router = useRouter()
+
+supabase.auth.onAuthStateChange((event) => {
+  if (event == 'SIGNED_IN') {
+    router.push('/')
+  }
+})
+
 async function onSubmit(event: FormSubmitEvent<Schema>) {
-  toast.add({ title: 'Success', description: 'The form has been submitted.', color: 'success' })
-  console.log(event.data)
+  const { email, password } = event.data
+  const { error, data } = await supabase.auth.signInWithPassword({ email, password })
+
+  if (error) {
+    toast.add({ title: 'Error', description: error.message, color: 'error' })
+  }
 }
-</script> -->
+</script>
+
+<template>
+  <UCard class="mt-36 mx-[5%]">
+    <template #header>
+      <!-- <Placeholder class="h-8" /> -->
+      <div class="flex justify-between">
+        <p>Siena College Tigaon inc. E Wallet</p>
+        <UAvatar src="/img/logo.jpeg" />
+      </div>
+    </template>
+
+    <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
+      <UFormField label="Email" name="email">
+        <UInput v-model="state.email" class="w-full" />
+      </UFormField>
+
+      <UFormField label="Password" name="password">
+        <UInput v-model="state.password" type="password" class="w-full" />
+      </UFormField>
+
+      <div class="flex justify-center">
+        <UButton type="submit" class="w-full justify-center">Login</UButton>
+      </div>
+    </UForm>
+
+    <template #footer>
+      <!-- <Placeholder class="h-8" /> -->
+    </template>
+  </UCard>
+</template>

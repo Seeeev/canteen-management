@@ -11,5 +11,14 @@ export default defineNuxtConfig({
     '@nuxt/scripts',
     '@nuxt/test-utils',
     '@nuxt/ui',
+    '@nuxthub/core',
+    '@nuxtjs/supabase'
   ],
+
+
+  app: {
+    pageTransition: { name: 'page', mode: 'out-in' },
+  },
+
+
 })
