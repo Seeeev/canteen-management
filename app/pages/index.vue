@@ -36,7 +36,7 @@ async function getUser() {
     console.error('Fetch error:', fetchError.value)
   } else {
     console.log('asdasdad')
-    console.log(data.value)
+    console.log(data.value?.balance)
   }
 }
 
