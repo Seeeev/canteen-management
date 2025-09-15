@@ -43,6 +43,7 @@ export type Database = {
           last_name: string | null
           middle_name: string | null
           section: Database["public"]["Enums"]["section"] | null
+          student_id: string | null
           suffix: string | null
           year: Database["public"]["Enums"]["year"] | null
         }
@@ -56,6 +57,7 @@ export type Database = {
           last_name?: string | null
           middle_name?: string | null
           section?: Database["public"]["Enums"]["section"] | null
+          student_id?: string | null
           suffix?: string | null
           year?: Database["public"]["Enums"]["year"] | null
         }
@@ -69,6 +71,7 @@ export type Database = {
           last_name?: string | null
           middle_name?: string | null
           section?: Database["public"]["Enums"]["section"] | null
+          student_id?: string | null
           suffix?: string | null
           year?: Database["public"]["Enums"]["year"] | null
         }

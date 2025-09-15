@@ -20,6 +20,7 @@
     "@nuxtjs/supabase": "^1.6.1",
     "@unhead/vue": "^2.0.14",
     "eslint": "^9.34.0",
+    "jsbarcode": "^3.12.1",
     "nuxt": "^4.0.3",
     "postgres": "^3.4.7",
     "typescript": "^5.9.2",

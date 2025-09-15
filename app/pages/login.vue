@@ -35,7 +35,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 </script>
 
 <template>
-  <UCard class="mt-36 mx-[5%]">
+  <UCard class="mt-36 mx-[3%] sm:mx-[30%]">
     <template #header>
       <!-- <Placeholder class="h-8" /> -->
       <div class="flex justify-between">
