@@ -12,13 +12,13 @@ export default defineNuxtConfig({
     '@nuxt/test-utils',
     '@nuxt/ui',
     '@nuxthub/core',
-    '@nuxtjs/supabase'
+    '@nuxtjs/supabase',
   ],
-
 
   app: {
     pageTransition: { name: 'page', mode: 'out-in' },
   },
-
-
+  supabase: {
+    redirect: false,
+  },
 })

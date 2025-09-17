@@ -2,6 +2,11 @@
 import * as z from 'zod'
 import type { FormSubmitEvent } from '@nuxt/ui'
 
+// used for re reouting to index.vue if user is already logged in
+definePageMeta({
+  middleware: 'auth-redirect',
+})
+
 const schema = z.object({
   email: z.string().email('Invalid email'),
   password: z.string().min(8, 'Must be at least 8 characters'),
@@ -18,9 +23,9 @@ const supabase = useSupabaseClient()
 const toast = useToast()
 const router = useRouter()
 
-supabase.auth.onAuthStateChange((event) => {
+await supabase.auth.onAuthStateChange((event) => {
   if (event == 'SIGNED_IN') {
-    router.push('/')
+    router.push('/student')
   }
 })
 
@@ -28,8 +33,8 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
   const { email, password } = event.data
   const { error, data } = await supabase.auth.signInWithPassword({ email, password })
 
-  if (error) {
-    toast.add({ title: 'Error', description: error.message, color: 'error' })
+  if (!error) {
+    await router.push('/student')
   }
 }
 </script>
