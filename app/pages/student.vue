@@ -1,109 +1,79 @@
 <script setup lang="ts">
-import { useSupabaseClient, useSupabaseUser } from '#imports'
+import { useSupabaseClient, useRouter } from '#imports'
 import type { Database } from '~/types/database.types'
+import { useUserInfo } from '~/composables/useUserInfo'
 
 definePageMeta({ middleware: 'auth-user' })
 
 const supabase = useSupabaseClient<Database>()
-const user = useSupabaseUser() // 🔹 reactive logged-in user
-const studentId = ref<string>('----') // default placeholder
+const router = useRouter()
 
-watchEffect(async () => {
-  // Only fetch when the user is ready and has an email
-  if (!user.value?.email) return
-
-  try {
-    const data = await $fetch<Database['public']['Tables']['users']['Row']>('/api/getUserInfo', {
-      method: 'POST',
-      body: { email: user.value.email },
-    })
-    studentId.value = data?.student_id ?? '----'
-  } catch (err) {
-    console.error('Failed to fetch studentId:', (err as Error).message)
-    studentId.value = '----'
-  }
-})
+const { studentId, balance, firstName, middleName, lastName, suffix, loading, error } =
+  useUserInfo()
 
 async function signOut() {
-  const { error } = await supabase.auth.signOut()
-  if (error) {
-    console.error(error.message)
+  const { error: signOutError } = await supabase.auth.signOut()
+  if (signOutError) {
+    console.error(signOutError.message)
   } else {
-    useRouter().push('/login')
+    router.push('/login')
   }
 }
 </script>
 
 <template>
   <UContainer>
-    <!-- <h1>INDEX</h1>
-    <h1>{{ name }}</h1>-->
-    <!-- <UButton @click="getUser">Hello</UButton> -->
-
     <div class="flex flex-col text-center mt-[5%]">
-      <p class="text-2xl">Seven Faura Abante</p>
-      <p class="text-sm">BS Computer Science 4A</p>
+      <template v-if="loading">
+        <p class="text-lg text-gray-500">Loading your information...</p>
+      </template>
 
-      <!-- <div class="h-[50px]"></div>
-      <USeparator />
-      <div class="h-[20px]"></div> -->
-      <div class="flex justify-center">
-        <div class="grid grid-cols-2 gap-4">
-          <UButton
-            class="justify-center w-[200px] h-[100px]"
-            color="primary"
-            label="Balance Inquiry"
-          />
-          <UButton
-            class="justify-center w-[200px] h-[100px]"
-            color="primary"
-            label="Transaction History"
-          />
+      <template v-else>
+        <p v-if="error" class="text-red-500">{{ error }}</p>
 
-          <UModal>
-            <!-- <UButton label="Open" color="neutral" variant="subtle" /> -->
+        <p class="text-2xl">{{ firstName }} {{ middleName }} {{ lastName }} {{ suffix }}</p>
+        <p class="text-sm">BS Computer Science 4A</p>
+
+        <div class="flex justify-center mt-6">
+          <div class="grid grid-cols-2 gap-4">
+            <UButton class="justify-center w-[200px] h-[100px]" color="primary">
+              Balance: ₱{{ balance }}
+            </UButton>
+
             <UButton
               class="justify-center w-[200px] h-[100px]"
               color="primary"
-              label="Show ID Number"
+              label="Transaction History"
             />
-            <template #content>
-              <Barcode :value="studentId" />
-            </template>
-          </UModal>
-          <UButton
-            class="justify-center w-[200px] h-[100px]"
-            color="primary"
-            label="Siena E-Menu"
-          />
-          <UButton class="justify-center col-span-2" color="primary" label="Settings" />
-          <UButton
-            @click="signOut"
-            class="justify-center col-span-2"
-            color="primary"
-            label="Sign Out"
-          />
+
+            <UModal>
+              <UButton
+                class="justify-center w-[200px] h-[100px]"
+                color="primary"
+                label="Show ID Number"
+              />
+              <template #content>
+                <Barcode :value="studentId" />
+              </template>
+            </UModal>
+
+            <UButton
+              class="justify-center w-[200px] h-[100px]"
+              color="primary"
+              label="Siena E-Menu"
+            />
+
+            <UButton class="justify-center col-span-2" color="primary" label="Settings" />
+
+            <UButton
+              @click="signOut"
+              class="justify-center col-span-2"
+              color="primary"
+              label="Sign Out"
+            />
+          </div>
         </div>
-        <!-- <UBadge icon="i-lucide-rocket" size="xl" color="primary" variant="solid">Badge</UBadge>
-        <UBadge icon="i-lucide-rocket" size="xl" color="primary" variant="solid">Badge</UBadge>
-        <UBadge icon="i-lucide-rocket" size="xl" color="primary" variant="solid">Badge</UBadge> -->
-      </div>
+      </template>
     </div>
   </UContainer>
 </template>
-
-<!-- <template>
-  <div>{{ greeting }}</div>
-</template>
-
-<script setup>
-const hour = new Date().getHours()
-const greeting = hour < 12 ? 'Good morning' : 'Good afternoon'
-</script> -->
-
-<!-- <template>
-  <UApp class="responsive-content">
-    <div class="hidden md:block">Desktop content</div>
-    <div class="md:hidden">Mobile content</div>
-  </UApp>
-</template> -->

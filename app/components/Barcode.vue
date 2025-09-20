@@ -26,7 +26,7 @@ function renderBarcode() {
     JsBarcode(barcodeCanvas.value, props.value, {
       format: 'CODE128',
       displayValue: true,
-      lineColor: '#0aa',
+      lineColor: '#000000',
       ...props.options, // let parent override defaults
     })
   }

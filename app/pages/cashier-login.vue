@@ -1,11 +1,7 @@
 <script setup lang="ts">
+import type { Database } from '~/types/database.types'
 import * as z from 'zod'
 import type { FormSubmitEvent } from '@nuxt/ui'
-
-// used for re reouting to index.vue if user is already logged in
-definePageMeta({
-  middleware: 'auth-redirect',
-})
 
 const schema = z.object({
   email: z.string().email('Invalid email'),
@@ -15,36 +11,41 @@ const schema = z.object({
 type Schema = z.output<typeof schema>
 
 const state = reactive<Partial<Schema>>({
-  email: '',
-  password: '',
+  email: undefined,
+  password: undefined,
 })
 
-const supabase = useSupabaseClient()
-const toast = useToast()
+const supabase = useSupabaseClient<Database>()
 const router = useRouter()
-
-await supabase.auth.onAuthStateChange((event) => {
-  if (event == 'SIGNED_IN') {
-    router.push('/student')
-  }
-})
+const toast = useToast()
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
-  const { email, password } = event.data
-  const { error, data } = await supabase.auth.signInWithPassword({ email, password })
+  // toast.add({ title: 'Success', description: 'The form has been submitted.', color: 'success' })
 
-  if (!error) {
-    await router.push('/student')
-  } else {
-    toast.add({
-      title: 'Error',
-      description: error.message,
-      color: 'error',
+  const email = event.data.email
+  const password = event.data.password
+
+  const { data, error } = await supabase
+    .from('cashiers')
+    .select('email')
+    .eq('email', email)
+    .single()
+
+  if (error) {
+    toast.add({ title: 'Error', description: error.message, color: 'error' })
+  } else if (data?.email === email) {
+    const { error: authError } = await supabase.auth.signInWithPassword({
+      email,
+      password,
     })
+    if (authError) {
+      toast.add({ title: 'Error', description: authError.message, color: 'error' })
+    } else {
+      router.push('cashier')
+    }
   }
 }
 </script>
-
 <template>
   <UCard class="mt-36 mx-[3%] sm:mx-[30%]">
     <template #header>
