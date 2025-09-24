@@ -41,7 +41,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     if (authError) {
       toast.add({ title: 'Error', description: authError.message, color: 'error' })
     } else {
-      router.push('cashier')
+      router.push('/cashier')
     }
   }
 }
