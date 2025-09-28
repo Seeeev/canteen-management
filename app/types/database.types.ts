@@ -44,21 +44,172 @@ export type Database = {
         }
         Relationships: []
       }
-      products: {
+      colleges: {
         Row: {
-          created_at: string
-          id: number
-          name: string | null
+          created_at: string | null
+          description: string | null
+          id: string
+          name: string
         }
         Insert: {
-          created_at?: string
-          id?: number
-          name?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          name: string
         }
         Update: {
-          created_at?: string
-          id?: number
-          name?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
+      enrollments: {
+        Row: {
+          created_at: string | null
+          enrollment_year: number
+          id: string
+          major_id: string | null
+          status: string | null
+          student_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          enrollment_year: number
+          id?: string
+          major_id?: string | null
+          status?: string | null
+          student_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          enrollment_year?: number
+          id?: string
+          major_id?: string | null
+          status?: string | null
+          student_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "enrollments_major_id_fkey"
+            columns: ["major_id"]
+            isOneToOne: false
+            referencedRelation: "majors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "enrollments_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "students"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      majors: {
+        Row: {
+          created_at: string | null
+          id: string
+          name: string
+          program_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          name: string
+          program_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          name?: string
+          program_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "majors_program_id_fkey"
+            columns: ["program_id"]
+            isOneToOne: false
+            referencedRelation: "programs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      programs: {
+        Row: {
+          code: string
+          college_id: string | null
+          created_at: string | null
+          description: string | null
+          id: string
+          name: string
+        }
+        Insert: {
+          code: string
+          college_id?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          name: string
+        }
+        Update: {
+          code?: string
+          college_id?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "programs_college_id_fkey"
+            columns: ["college_id"]
+            isOneToOne: false
+            referencedRelation: "colleges"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      students: {
+        Row: {
+          balance: number | null
+          created_at: string | null
+          date_of_birth: string | null
+          email: string | null
+          first_name: string
+          gender: Database["public"]["Enums"]["gender"] | null
+          id: string
+          last_name: string
+          middle_name: string | null
+          student_number: string
+          suffix: string | null
+        }
+        Insert: {
+          balance?: number | null
+          created_at?: string | null
+          date_of_birth?: string | null
+          email?: string | null
+          first_name: string
+          gender?: Database["public"]["Enums"]["gender"] | null
+          id?: string
+          last_name: string
+          middle_name?: string | null
+          student_number: string
+          suffix?: string | null
+        }
+        Update: {
+          balance?: number | null
+          created_at?: string | null
+          date_of_birth?: string | null
+          email?: string | null
+          first_name?: string
+          gender?: Database["public"]["Enums"]["gender"] | null
+          id?: string
+          last_name?: string
+          middle_name?: string | null
+          student_number?: string
+          suffix?: string | null
         }
         Relationships: []
       }
@@ -68,21 +219,30 @@ export type Database = {
           cashier_id: number | null
           created_at: string
           id: number
-          student_id: string | null
+          student_number: string | null
+          tansaction_type:
+            | Database["public"]["Enums"]["transaction_type"]
+            | null
         }
         Insert: {
           amount?: number | null
           cashier_id?: number | null
           created_at?: string
           id?: number
-          student_id?: string | null
+          student_number?: string | null
+          tansaction_type?:
+            | Database["public"]["Enums"]["transaction_type"]
+            | null
         }
         Update: {
           amount?: number | null
           cashier_id?: number | null
           created_at?: string
           id?: number
-          student_id?: string | null
+          student_number?: string | null
+          tansaction_type?:
+            | Database["public"]["Enums"]["transaction_type"]
+            | null
         }
         Relationships: [
           {
@@ -94,7 +254,7 @@ export type Database = {
           },
           {
             foreignKeyName: "transactions_student_id_fkey"
-            columns: ["student_id"]
+            columns: ["student_number"]
             isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["student_id"]
@@ -155,7 +315,9 @@ export type Database = {
     }
     Enums: {
       course: "Course A" | "Course B" | "Course C"
+      gender: "male" | "female"
       section: "A" | "B" | "C"
+      transaction_type: "withraw" | "deposite" | "purchase"
       year: "1" | "2" | "3" | "4"
     }
     CompositeTypes: {
@@ -285,7 +447,9 @@ export const Constants = {
   public: {
     Enums: {
       course: ["Course A", "Course B", "Course C"],
+      gender: ["male", "female"],
       section: ["A", "B", "C"],
+      transaction_type: ["withraw", "deposite", "purchase"],
       year: ["1", "2", "3", "4"],
     },
   },

@@ -8,7 +8,7 @@ definePageMeta({ middleware: 'auth-user' })
 const supabase = useSupabaseClient<Database>()
 const router = useRouter()
 
-const { studentId, balance, firstName, middleName, lastName, suffix, loading, error } =
+const { student_number, balance, firstName, middleName, lastName, suffix, loading, error } =
   useUserInfo()
 
 async function signOut() {
@@ -53,7 +53,7 @@ async function signOut() {
                 label="Show ID Number"
               />
               <template #content>
-                <Barcode :value="studentId" />
+                <Barcode :value="student_number" />
               </template>
             </UModal>
 

@@ -1,11 +1,11 @@
 import { useSupabaseUser } from '#imports'
 import type { Database } from '~/types/database.types'
 
-type UserRow = Database['public']['Tables']['users']['Row']
+type UserRow = Database['public']['Tables']['students']['Row']
 
 export function useUserInfo() {
   const user = useSupabaseUser()
-  const studentId = ref<string>('----')
+  const student_number = ref<string>('----')
   const balance = ref<number>(0)
   const firstName = ref<string>('')
   const middleName = ref<string>('')
@@ -23,7 +23,7 @@ export function useUserInfo() {
         method: 'POST',
         body: { email: user.value.email },
       })
-      studentId.value = data?.student_id ?? '----'
+      student_number.value = data?.student_number ?? '----'
       balance.value = data?.balance ?? 0
       firstName.value = data?.first_name ?? ''
       middleName.value = data?.middle_name ?? ''
@@ -39,7 +39,7 @@ export function useUserInfo() {
   }
 
   function resetUserInfo() {
-    studentId.value = '----'
+    student_number.value = '----'
     balance.value = 0
     firstName.value = ''
     middleName.value = ''
@@ -50,7 +50,7 @@ export function useUserInfo() {
   watchEffect(fetchUserInfo)
 
   return {
-    studentId,
+    student_number,
     balance,
     firstName,
     middleName,
