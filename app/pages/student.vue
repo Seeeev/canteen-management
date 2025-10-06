@@ -3,10 +3,18 @@ import { useSupabaseClient, useRouter } from '#imports'
 import type { Database } from '~/types/database.types'
 import { useUserInfo } from '~/composables/useUserInfo'
 
-definePageMeta({ middleware: 'auth-user' })
+definePageMeta({ middleware: ['auth-user', 'roles'] })
 
 const supabase = useSupabaseClient<Database>()
 const router = useRouter()
+const user = useSupabaseUser()
+
+onBeforeMount(async () => {
+  if (user.value?.user_metadata.role != 'student') {
+    await supabase.auth.signOut()
+    router.push('/login')
+  }
+})
 
 const { student_number, balance, firstName, middleName, lastName, suffix, loading, error } =
   useUserInfo()

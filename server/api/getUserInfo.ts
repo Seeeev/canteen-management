@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
   const email = body.email
 
   const client = await serverSupabaseClient(event)
-  const { data, error } = await client.from('users').select('*').eq('email', email).single()
+  const { data, error } = await client.from('students').select('*').eq('email', email).single()
 
   if (error) throw error
   return data

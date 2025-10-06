@@ -219,8 +219,9 @@ export type Database = {
           cashier_id: number | null
           created_at: string
           id: number
+          refunded: boolean | null
           student_number: string | null
-          tansaction_type:
+          transaction_type:
             | Database["public"]["Enums"]["transaction_type"]
             | null
         }
@@ -229,8 +230,9 @@ export type Database = {
           cashier_id?: number | null
           created_at?: string
           id?: number
+          refunded?: boolean | null
           student_number?: string | null
-          tansaction_type?:
+          transaction_type?:
             | Database["public"]["Enums"]["transaction_type"]
             | null
         }
@@ -239,8 +241,9 @@ export type Database = {
           cashier_id?: number | null
           created_at?: string
           id?: number
+          refunded?: boolean | null
           student_number?: string | null
-          tansaction_type?:
+          transaction_type?:
             | Database["public"]["Enums"]["transaction_type"]
             | null
         }
@@ -253,58 +256,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "transactions_student_id_fkey"
+            foreignKeyName: "transactions_student_number_fkey"
             columns: ["student_number"]
             isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["student_id"]
+            referencedRelation: "students"
+            referencedColumns: ["student_number"]
           },
         ]
-      }
-      users: {
-        Row: {
-          balance: number | null
-          course: Database["public"]["Enums"]["course"] | null
-          created_at: string
-          email: string | null
-          first_name: string | null
-          id: number
-          last_name: string | null
-          middle_name: string | null
-          section: Database["public"]["Enums"]["section"] | null
-          student_id: string | null
-          suffix: string | null
-          year: Database["public"]["Enums"]["year"] | null
-        }
-        Insert: {
-          balance?: number | null
-          course?: Database["public"]["Enums"]["course"] | null
-          created_at?: string
-          email?: string | null
-          first_name?: string | null
-          id?: number
-          last_name?: string | null
-          middle_name?: string | null
-          section?: Database["public"]["Enums"]["section"] | null
-          student_id?: string | null
-          suffix?: string | null
-          year?: Database["public"]["Enums"]["year"] | null
-        }
-        Update: {
-          balance?: number | null
-          course?: Database["public"]["Enums"]["course"] | null
-          created_at?: string
-          email?: string | null
-          first_name?: string | null
-          id?: number
-          last_name?: string | null
-          middle_name?: string | null
-          section?: Database["public"]["Enums"]["section"] | null
-          student_id?: string | null
-          suffix?: string | null
-          year?: Database["public"]["Enums"]["year"] | null
-        }
-        Relationships: []
       }
     }
     Views: {
@@ -317,7 +275,7 @@ export type Database = {
       course: "Course A" | "Course B" | "Course C"
       gender: "male" | "female"
       section: "A" | "B" | "C"
-      transaction_type: "withraw" | "deposite" | "purchase"
+      transaction_type: "withraw" | "deposite" | "purchase" | "refund"
       year: "1" | "2" | "3" | "4"
     }
     CompositeTypes: {
@@ -449,7 +407,7 @@ export const Constants = {
       course: ["Course A", "Course B", "Course C"],
       gender: ["male", "female"],
       section: ["A", "B", "C"],
-      transaction_type: ["withraw", "deposite", "purchase"],
+      transaction_type: ["withraw", "deposite", "purchase", "refund"],
       year: ["1", "2", "3", "4"],
     },
   },

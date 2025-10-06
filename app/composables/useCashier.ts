@@ -19,5 +19,16 @@ export function useCashier() {
     toast.add({ title: 'Success', description: message, color: 'success' })
   }
 
-  return { supabase, user, signOut, showError, showSuccess }
+  async function getCashierId(email: string) {
+    const { data, error } = await supabase.from('cashiers').select('id').eq('email', email)
+
+    if (error) {
+      showError(error.message)
+      return
+    }
+
+    return data?.at(0)!.id
+  }
+
+  return { supabase, user, signOut, showError, showSuccess, getCashierId }
 }
