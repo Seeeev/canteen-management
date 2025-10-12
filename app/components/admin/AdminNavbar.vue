@@ -1,3 +1,3 @@
 <template>
-  <UDashboardNavbar title="Admin Panel"> </UDashboardNavbar>
+  <UDashboardNavbar title="Admin Panel" icon="i-lucide-shield-user"> </UDashboardNavbar>
 </template>

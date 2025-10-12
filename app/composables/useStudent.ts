@@ -3,7 +3,7 @@ import { useCashier } from './useCashier'
 import { collapseTextChangeRangesAcrossMultipleVersions } from 'typescript'
 
 export function useStudent() {
-  const { supabase, user, showError, showSuccess, getCashierId } = useCashier()
+  const { supabase, user, showError, showSuccess } = useCashier()
 
   async function fetchBalance(student_number: string) {
     const { data, error } = await supabase
@@ -155,5 +155,5 @@ export function useStudent() {
 
     showSuccess(`₱${amount} has been refunded to Student: ${options.student_number}`)
   }
-  return { fetchBalance, purchase, refund, fetchStudentDetails, fetchAllStudents }
+  return { fetchBalance, purchase, refund, fetchStudentDetails, fetchAllStudents, recordTransaction }
 }
