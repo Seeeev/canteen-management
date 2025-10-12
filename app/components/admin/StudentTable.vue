@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<!-- <script setup lang="ts">
 import type { TableColumn } from '#ui/types'
 import type { Database } from '~/types/database.types'
 import { useClipboard } from '@vueuse/core'
@@ -57,8 +57,8 @@ const columns: TableColumn<STUDENT>[] = [
               variant: 'ghost',
               class: 'ml-auto',
               'aria-label': 'Actions dropdown',
-            })
-        )
+            }),
+        ),
       )
     },
   },
@@ -122,4 +122,36 @@ onMounted(async () => {
       :hover="true"
     />
   </UPageCard>
+</template> -->
+
+<script setup lang="ts">
+const supabase = useSupabaseClient()
+
+const { data, refresh, pending, error } = await useAsyncData('students', async () => {
+  const { data, error } = await supabase.from('students').select('*')
+  if (error) throw error
+  return data
+})
+const globalFilter = ref()
+</script>
+
+<template>
+  <UContainer class="py-8">
+    <div class="flex items-center justify-between mb-4">
+      <h1 class="text-2xl font-semibold">Students</h1>
+      <UButton icon="i-heroicons-arrow-path" @click="() => refresh()" :loading="pending">
+        Refresh
+      </UButton>
+    </div>
+    <div class="flex px-4 py-3.5 ">
+      <UInput v-model="globalFilter" class="max-w-sm" placeholder="Filter..." />
+    </div>
+    <UCard>
+      <UTable :data="data" v-model:global-filter="globalFilter" :loading="pending" class="w-full h-[80vh] overflow-y-auto"   />
+    </UCard>
+
+    <UAlert v-if="error" color="error" icon="i-heroicons-exclamation-triangle" class="mt-4">
+      {{ error.message }}
+    </UAlert>
+  </UContainer>
 </template>
