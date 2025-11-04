@@ -20,11 +20,24 @@ const features = [
 
 const router = useRouter()
 const user = useSupabaseUser()
+const { UserRole } = useAdmin()
+
 
 function handleGetStarted() {
   // If user is logged in, go to /student, else go to /login
   if (user.value) {
-    router.push('/student')
+    if (user.value.user_metadata.role == UserRole.Student) {
+      router.push('/student')
+      return
+    }
+    if (user.value.user_metadata.role == UserRole.Admin) {
+      router.push('/admin')
+      return
+    }
+    if (user.value.user_metadata.role == UserRole.Cashier) {
+      router.push('/cashier')
+      return
+    }
   } else {
     router.push('/login')
   }
@@ -41,8 +54,8 @@ function handleGetStarted() {
       </p>
 
       <div class="mt-8 flex justify-center gap-4">
-        <UButton size="lg" color="white" @click="handleGetStarted"> Get Started </UButton>
-        <UButton size="lg" variant="outline" color="white" to="/about"> Learn More </UButton>
+        <UButton size="lg" color="neutral" class="cursor-pointer" @click="handleGetStarted"> Get Started </UButton>
+        <UButton size="lg" variant="outline" color="neutral" to="/about"> Learn More </UButton>
       </div>
     </header>
 
@@ -65,7 +78,7 @@ function handleGetStarted() {
     <!-- ===================== Call To Action ===================== -->
     <footer class="bg-red-500 text-white text-center py-12">
       <h2 class="text-2xl font-bold mb-4">Hungry? Let’s get started!</h2>
-      <UButton size="lg" color="white" to="/login">Open Your E-Canteen Wallet</UButton>
+      <UButton size="lg" color="neutral" to="/login">Open Your E-Canteen Wallet</UButton>
 
       <p class="mt-6 text-sm opacity-80">
         © {{ new Date().getFullYear() }} Siena College Tigaon Inc. All rights reserved.

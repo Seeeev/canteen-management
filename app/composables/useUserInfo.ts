@@ -23,7 +23,7 @@ export function useUserInfo() {
         method: 'POST',
         body: { email: user.value.email },
       })
-      student_number.value = data?.student_number ?? '----'
+      student_number.value = data.student_number ?? '----a'
       balance.value = data?.balance ?? 0
       firstName.value = data?.first_name ?? ''
       middleName.value = data?.middle_name ?? ''
@@ -37,6 +37,7 @@ export function useUserInfo() {
       loading.value = false
     }
   }
+  console.log(student_number.value)
 
   function resetUserInfo() {
     student_number.value = '----'

@@ -138,8 +138,8 @@ const globalFilter = ref()
 <template>
   <UContainer class="py-8">
     <div class="flex items-center justify-between mb-4">
-      <h1 class="text-2xl font-semibold">Students</h1>
-      <UButton icon="i-heroicons-arrow-path" @click="() => refresh()" :loading="pending">
+      <h1 class="text-2xl font-semibold text-red-400">Students</h1>
+      <UButton icon="i-heroicons-arrow-path" color="error" @click="() => refresh()" :loading="pending">
         Refresh
       </UButton>
     </div>

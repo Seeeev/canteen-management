@@ -1,25 +1,26 @@
 // middleware/role.ts
-
 export default defineNuxtRouteMiddleware((to, from) => {
   const user = useSupabaseUser()
 
-  // Wait until user is loaded
-  if (!user.value) {
-    return navigateTo('/login') // Redirect if not logged in
-  }
+  // If user is not logged in at all
+  // if (!user.value) {
+  //   // You can optionally redirect to a generic login page
+  //   return navigateTo('/login')
+  // }
 
-  const role = user.value.user_metadata.role
+  // Safely get role
+  const role = user.value?.user_metadata?.role
 
-  // Example role-based rules
+  // If role is undefined, redirect based on route prefix
   if (to.path.startsWith('/admin') && role !== 'admin') {
-    return navigateTo('/unauthorized')
+    return navigateTo('/admin-login')
   }
 
   if (to.path.startsWith('/cashier') && role !== 'cashier') {
-    return navigateTo('/unauthorized')
+    return navigateTo('/cashier-login')
   }
 
   if (to.path.startsWith('/student') && role !== 'student') {
-    return navigateTo('/unauthorized')
+    return navigateTo('/login')
   }
 })

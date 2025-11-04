@@ -40,14 +40,20 @@ async function onSubmit(event: FormSubmitEvent<PurchaseSchema>) {
   <div>
     <UForm :schema="purchaseSchema" :state="purchaseState" class="space-y-4" @submit="onSubmit">
       <UFormField label="Student ID" name="id">
+        <template #label>
+          <span class="text-white">Student ID</span>
+        </template>
         <UInput v-model="purchaseState.student_number" class="w-full" />
       </UFormField>
 
       <UFormField label="Amount" name="amount">
+        <template #label>
+          <span class="text-white">Amount</span>
+        </template>
         <UInput v-model="purchaseState.amount" class="w-full" />
       </UFormField>
 
-      <UButton type="submit" class="w-full justify-center"> Refund </UButton>
+      <UButton type="submit" class="w-full justify-center hover:bg-red-700 bg-red-800"> Refund </UButton>
     </UForm>
   </div>
 </template>

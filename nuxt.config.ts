@@ -2,6 +2,9 @@
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
+  colorMode: {
+    preference: 'light', // Sets the default preference to light mode
+  },
   css: ['~/assets/css/main.css'],
   // srcDir: 'src/',
   modules: [
@@ -18,7 +21,9 @@ export default defineNuxtConfig({
   app: {
     pageTransition: { name: 'page', mode: 'out-in' },
   },
+
   supabase: {
     redirect: false,
   },
+
 })

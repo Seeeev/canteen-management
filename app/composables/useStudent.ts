@@ -25,7 +25,7 @@ export function useStudent() {
     student_number: string,
     amount: number,
     currentBalance: number,
-    cashier_id: number
+    cashier_id: number,
   ) {
     const newBalance = currentBalance - amount
 
@@ -155,5 +155,60 @@ export function useStudent() {
 
     showSuccess(`₱${amount} has been refunded to Student: ${options.student_number}`)
   }
-  return { fetchBalance, purchase, refund, fetchStudentDetails, fetchAllStudents, recordTransaction }
+
+  async function getEnrollment(student_number: string) {
+    const client = useSupabaseClient()
+    const { data, error } = await client
+      .from('students')
+      .select(
+        `
+      id,
+      first_name,
+      last_name,
+      enrollments (
+        major:majors (
+          name,
+          program:programs (
+            name
+          )
+        )
+      )
+    `,
+      )
+      .eq('student_number', student_number)
+      .maybeSingle()
+
+    if (error) {
+      console.log(data)
+      throw new Error(error.message)
+    }
+
+    console.log(data, student_number)
+    return {
+      fullName: `${data?.first_name} ${data?.last_name}`,
+      major: data?.enrollments[0]?.major?.name || null,
+      program: data?.enrollments[0]?.major?.program?.name || null,
+    }
+  }
+
+  function getTransactions(student_number: string) {
+    return useAsyncData('transactions', async () => {
+      const { data, error } = await supabase
+        .from('transactions')
+        .select('*')
+        .eq('student_number', student_number)
+      if (error) throw error
+      return data
+    })
+  }
+  return {
+    getTransactions,
+    fetchBalance,
+    purchase,
+    refund,
+    fetchStudentDetails,
+    fetchAllStudents,
+    recordTransaction,
+    getEnrollment,
+  }
 }

@@ -58,13 +58,13 @@ const items: NavigationMenuItem[][] = [
 </script>
 
 <template>
-  <UDashboardSidebar mode="slideover" collapsible resizable>
+  <UDashboardSidebar mode="slideover" collapsible resizable :ui="{}">
     <template #header="{ collapsed }">
       <!-- <UIcon v-if="collapsed" name="i-lucide-lightbulb" class="size-5" /> -->
       <!-- <UIcon name="i-simple-icons-nuxtdotjs" class="size-5 text-primary mx-auto" /> -->
-      <UIcon name="i-lucide-user-cog" class="size-14 text-primary mx-auto" />
+      <UIcon name="i-lucide-shield-user" class="size-14 mx-auto text-red-400"  />
     </template>
 
-    <UNavigationMenu :items="items" orientation="vertical" />
+    <UNavigationMenu :items="items" orientation="vertical"  color="error"/>
   </UDashboardSidebar>
 </template>

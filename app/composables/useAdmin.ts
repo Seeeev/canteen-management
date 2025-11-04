@@ -2,6 +2,7 @@ import type { isReturnStatement } from 'typescript'
 import Cashier from '~/pages/cashier.vue'
 import type { Database } from '~/types/database.types'
 import * as z from 'zod'
+import { email } from 'zod/v4'
 
 export function useAdmin() {
   const supabase = useSupabaseClient<Database>()
@@ -68,6 +69,22 @@ export function useAdmin() {
   }
 
   async function registerCashier(cashier: CashierInput) {
+    
+    // check if email already exist in cashier table
+    const { data: email, error: emailError } = await supabase
+      .from('cashiers')
+      .select('email')
+      .eq('email', cashier.email!)
+    if (email && email.length > 0) {
+      showError('Email already exist!')
+      return
+    }
+    if (emailError) {
+      console.log('asd')
+      showError(emailError.message)
+      return
+    }
+
     // Step 1: Register the user via Supabase Auth
     const { data: authData, error: signUpError } = await supabase.auth.signUp({
       email: cashier.email ?? '',
@@ -103,6 +120,7 @@ export function useAdmin() {
   }
 
   async function registerStudent(input: StudentInput) {
+    console.log('asdad')
     // sign up a student
     const { error: authError, data: authData } = await supabase.auth.signUp({
       email: input.email ?? '',
@@ -262,5 +280,6 @@ export function useAdmin() {
     deposit,
     withraw,
     TransactionSchema,
+    UserRole,
   }
 }

@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import type { Database } from '~/types/database.types'
 import * as z from 'zod'
-import type { FormSubmitEvent } from '@nuxt/ui'
+import type { AuthFormField, FormSubmitEvent } from '@nuxt/ui'
+
+const user = useSupabaseUser()
 
 const schema = z.object({
   email: z.string().email('Invalid email'),
@@ -19,61 +21,85 @@ const supabase = useSupabaseClient<Database>()
 const router = useRouter()
 const toast = useToast()
 
+const fields: AuthFormField[] = [
+  {
+    name: 'email',
+    type: 'email',
+    label: 'Email',
+    placeholder: 'Enter your email',
+    required: true,
+    color: 'neutral',
+  },
+  {
+    name: 'password',
+    label: 'Password',
+    type: 'password',
+    placeholder: 'Enter your password',
+    required: true,
+    color: 'neutral',
+  },
+  {
+    name: 'remember',
+    label: 'Remember me',
+    type: 'checkbox',
+  },
+]
+
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   // toast.add({ title: 'Success', description: 'The form has been submitted.', color: 'success' })
-
   const email = event.data.email
   const password = event.data.password
 
-  const { data, error } = await supabase
+  const { data: cashierData, error: cashierError } = await supabase
     .from('cashiers')
     .select('email')
     .eq('email', email)
     .single()
 
-  if (error) {
-    toast.add({ title: 'Error', description: error.message, color: 'error' })
-  } else if (data?.email === email) {
-    const { error: authError } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    })
-    if (authError) {
-      toast.add({ title: 'Error', description: authError.message, color: 'error' })
-    } else {
-      router.push('/cashier')
-    }
+  if (cashierError) {
+    toast.add({ title: 'Error', description: cashierError.message, color: 'error' })
+    return
   }
+
+  if (!cashierData) {
+    toast.add({ title: 'Error', description: 'Email not registered as a cashier.', color: 'error' })
+    return
+  }
+
+  const { data, error: authError } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  })
+
+  if (data.user?.user_metadata.role != 'cashier') {
+    toast.add({ title: 'Error', description: 'User is not a cashier', color: 'error' })
+  }
+
+  if (authError) {
+    toast.add({ title: 'Error', description: authError.message, color: 'error' })
+    return
+  }
+
+  router.push('/cashier')
 }
 </script>
 <template>
-  <UCard class="mt-36 mx-[3%] sm:mx-[30%]">
-    <template #header>
-      <!-- <Placeholder class="h-8" /> -->
-      <div class="flex justify-between">
-        <p>Siena College Tigaon inc. E Wallet</p>
-        <UAvatar src="/img/logo.jpeg" />
-      </div>
-    </template>
-
-    <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
-      <UFormField label="Email" name="email">
-        <UInput v-model="state.email" class="w-full" />
-      </UFormField>
-
-      <UFormField label="Password" name="password">
-        <UInput v-model="state.password" type="password" class="w-full" />
-      </UFormField>
-
-      <NuxtLink to="/password/reset" class="hover:underline"> Forgot password? </NuxtLink>
-
-      <div class="flex justify-center">
-        <UButton type="submit" class="w-full justify-center">Login</UButton>
-      </div>
-    </UForm>
-
-    <template #footer>
-      <!-- <Placeholder class="h-8" /> -->
-    </template>
-  </UCard>
+  <div class="bg-gradient-to-b from-red-700 to-black min-h-screen flex items-center justify-center">
+    <UPageCard class="w-full max-w-md">
+      <UAuthForm
+        :schema="schema"
+        title="Cashier Login"
+        description="Enter your credentials to access your account."
+        icon="i-lucide-user"
+        :fields="fields"
+        @submit="onSubmit"
+      >
+        <template #submit>
+          <UButton class="w-full justify-center hover:bg-red-200" color="neutral" type="submit"
+            >Login</UButton
+          >
+        </template>
+      </UAuthForm>
+    </UPageCard>
+  </div>
 </template>

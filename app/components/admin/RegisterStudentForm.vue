@@ -12,11 +12,25 @@ const { fetchTransactions, registerStudent, showError } = useAdmin()
 const fields = ref<AuthFormField[]>([
   { name: 'email', type: 'email', label: 'Email', placeholder: 'Enter your email', required: true },
   {
+    name: 'student_number',
+    type: 'text',
+    label: 'Student Number',
+    placeholder: 'Enter student number',
+    required: true
+  },
+  {
     name: 'password',
     type: 'password',
     label: 'Password',
     placeholder: 'Enter your password',
     required: true,
+  },
+
+  {
+    name: 'balance',
+    type: 'number',
+    label: 'Balance',
+    placeholder: 'Enter balance (Optional)',
   },
 
   {
@@ -51,6 +65,7 @@ const fields = ref<AuthFormField[]>([
     type: 'text',
     label: 'Gender',
     placeholder: 'male',
+    required: true
   },
 ])
 
@@ -73,6 +88,7 @@ type Schema = z.output<typeof schema>
 
 // ✅ Submit handler
 async function onSubmit(payload: FormSubmitEvent<Schema>) {
+  console.log('asdasdasd')
   const {
     email,
     password,
@@ -102,5 +118,11 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
 </script>
 
 <template>
-  <UAuthForm :schema="schema" :fields="fields" @submit="onSubmit" class="max-w-sm" />
+  <UAuthForm :schema="schema" :fields="fields" @submit="onSubmit" class="max-w-sm" >
+  <template #submit>
+      <UButton class="w-full justify-center bg-gray-400 hover:bg-red-400" type="submit"
+        >Create</UButton
+      >
+    </template>
+  </UAuthForm>
 </template>

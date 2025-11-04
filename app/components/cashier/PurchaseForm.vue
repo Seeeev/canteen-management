@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import type { colorPicker } from '#build/ui'
 import type { FormSubmitEvent } from '@nuxt/ui'
 import * as z from 'zod'
+import { email } from 'zod/v4'
 
 const props = defineProps<{ cashier_id: number }>()
 
@@ -35,6 +37,9 @@ async function onSubmit(event: FormSubmitEvent<PurchaseSchema>) {
   <div>
     <UForm :schema="purchaseSchema" :state="purchaseState" class="space-y-4" @submit="onSubmit">
       <UFormField label="Student ID" name="id">
+        <template #label>
+          <span class="text-white">Student ID</span>
+        </template>
         <UInput v-model="purchaseState.student_number" class="w-full">
           <template #trailing>
             <UButton
@@ -49,10 +54,15 @@ async function onSubmit(event: FormSubmitEvent<PurchaseSchema>) {
       </UFormField>
 
       <UFormField label="Amount" name="amount">
+        <template #label>
+          <span class="text-white">Amount</span>
+        </template>
         <UInput v-model="purchaseState.amount" class="w-full" />
       </UFormField>
 
-      <UButton type="submit" class="w-full justify-center">Purchase</UButton>
+      <UButton type="submit" class="w-full justify-center hover:bg-red-700 bg-red-800"
+        >Purchase</UButton
+      >
     </UForm>
   </div>
 </template>

@@ -3,7 +3,7 @@ import RegisterStudentForm from '~/components/admin/RegisterStudentForm.vue'
 import StudentTable from '~/components/admin/StudentTable.vue'
 definePageMeta({
   layout: 'dashboard',
-  // middleware: 'roles',
+  middleware: 'roles',
 })
 
 const { deposit } = useAdmin()
@@ -32,14 +32,14 @@ const deleteByEmail = async () => {
 }
 </script>
 <template>
-  <div>
+  <div class="flex justify-center items-center">
     <RegisterStudentForm />
-    <StudentTable />
-    <UButton label="Deposit" @click="onClickDeposit" />
+    <!-- <StudentTable /> -->
+    <!-- <UButton label="Deposit" @click="onClickDeposit" />
     <UButton label="Withraw" @click="onClickWithraw" />
 
     <UInput v-model="email" placeholder="Enter email" />
     <UButton @click="deleteByEmail">Delete User</UButton>
-    <p>{{ message }}</p>
+    <p>{{ message }}</p> -->
   </div>
 </template>

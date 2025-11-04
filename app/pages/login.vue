@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import * as z from 'zod'
-import type { FormSubmitEvent } from '@nuxt/ui'
+import type { FormSubmitEvent, AuthFormField } from '@nuxt/ui'
+import type { container } from '#build/ui'
 
 // used for re reouting to index.vue if user is already logged in
 definePageMeta({
@@ -43,36 +44,51 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     })
   }
 }
+
+const fields: AuthFormField[] = [
+  {
+    name: 'email',
+    type: 'email',
+    label: 'Email',
+    placeholder: 'Enter your email',
+    color: 'neutral',
+    required: true,
+  },
+  {
+    name: 'password',
+    label: 'Password',
+    type: 'password',
+    placeholder: 'Enter your password',
+    color: 'neutral',
+    required: true,
+  },
+  {
+    name: 'remember',
+    label: 'Remember me',
+    type: 'checkbox',
+  },
+]
 </script>
 
 <template>
-  <UCard class="mt-36 mx-[3%] sm:mx-[30%]">
-    <template #header>
-      <!-- <Placeholder class="h-8" /> -->
-      <div class="flex justify-between">
-        <p>Siena College Tigaon inc. E Wallet</p>
-        <UAvatar src="/img/logo.jpeg" />
-      </div>
-    </template>
-
-    <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
-      <UFormField label="Email" name="email">
-        <UInput v-model="state.email" class="w-full" />
-      </UFormField>
-
-      <UFormField label="Password" name="password">
-        <UInput v-model="state.password" type="password" class="w-full" />
-      </UFormField>
-
-      <NuxtLink to="/password/reset" class="hover:underline"> Forgot password? </NuxtLink>
-
-      <div class="flex justify-center">
-        <UButton type="submit" class="w-full justify-center">Login</UButton>
-      </div>
-    </UForm>
-
-    <template #footer>
-      <!-- <Placeholder class="h-8" /> -->
-    </template>
-  </UCard>
+  <div class="bg-gradient-to-b from-red-700 to-black min-h-screen flex items-center justify-center">
+    <UPageCard class="w-full max-w-md">
+      <UAuthForm
+        :schema="schema"
+        title="Student Login"
+        description="Enter your credentials to access your account."
+        icon="i-lucide-user"
+        :fields="fields"
+        @submit="onSubmit"
+      >
+        <template #submit>
+          <UButton class="w-full justify-center hover:bg-red-700" color="neutral" type="submit"
+            >Login</UButton
+          >
+        </template>
+      </UAuthForm>
+    </UPageCard>
+  </div>
 </template>
+
+<!-- <NuxtLink to="/password/reset" class="hover:underline"> Forgot password? </NuxtLink> -->

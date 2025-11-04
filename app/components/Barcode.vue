@@ -1,6 +1,6 @@
 <template>
   <!-- Pass class from parent if you want to control size -->
-  <canvas ref="barcodeCanvas" :class="canvasClass"></canvas>
+  <canvas ref="barcodeCanvas" :class="canvasClass "></canvas>
 </template>
 
 <script setup lang="ts">

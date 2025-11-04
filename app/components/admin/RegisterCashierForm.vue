@@ -68,12 +68,18 @@ async function onSubmit(payload: FormSubmitEvent<Schema>) {
     first_name,
     middle_name: middle_name ?? null,
     last_name,
-     suffix: suffix ?? null,
+    suffix: suffix ?? null,
     password,
   })
 }
 </script>
 
 <template>
-  <UAuthForm :schema="schema" :fields="fields" @submit="onSubmit" class="max-w-sm" />
+  <UAuthForm :schema="schema" :fields="fields" @submit="onSubmit" class="max-w-sm">
+    <template #submit>
+      <UButton class="w-full justify-center bg-gray-400 hover:bg-red-400" type="submit"
+        >Create</UButton
+      >
+    </template>
+  </UAuthForm>
 </template>
