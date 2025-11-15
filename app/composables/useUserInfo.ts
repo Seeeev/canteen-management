@@ -5,6 +5,7 @@ type UserRow = Database['public']['Tables']['students']['Row']
 
 export function useUserInfo() {
   const user = useSupabaseUser()
+  const id = ref<string>('')
   const student_number = ref<string>('----')
   const balance = ref<number>(0)
   const firstName = ref<string>('')
@@ -23,6 +24,7 @@ export function useUserInfo() {
         method: 'POST',
         body: { email: user.value.email },
       })
+      id.value = data.id ?? ''
       student_number.value = data.student_number ?? '----a'
       balance.value = data?.balance ?? 0
       firstName.value = data?.first_name ?? ''
@@ -37,9 +39,9 @@ export function useUserInfo() {
       loading.value = false
     }
   }
-  console.log(student_number.value)
 
   function resetUserInfo() {
+    id.value = ''
     student_number.value = '----'
     balance.value = 0
     firstName.value = ''
@@ -48,9 +50,17 @@ export function useUserInfo() {
     suffix.value = ''
   }
 
-  watchEffect(fetchUserInfo)
+  // watchEffect(fetchUserInfo)
+  watch(
+    () => user.value?.email,
+    (email) => {
+      if (email) fetchUserInfo()
+    },
+    { immediate: true },
+  )
 
   return {
+    id,
     student_number,
     balance,
     firstName,

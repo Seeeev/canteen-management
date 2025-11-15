@@ -19,7 +19,7 @@ onBeforeMount(async () => {
   }
 })
 
-const { student_number, balance, firstName, middleName, lastName, suffix, loading, error } =
+const { id, student_number, balance, firstName, middleName, lastName, suffix, loading, error } =
   useUserInfo()
 const { getEnrollment } = useStudent()
 
@@ -50,12 +50,14 @@ async function signOut() {
     router.push('/login')
   }
 }
+
+function showProfile() {
+  router.push(`/students/${id.value}`)
+}
 </script>
 
 <template>
-  <div
-    class="bg-gradient-to-b from-red-700 to-black min-h-screen flex items-center justify-center"
-  >
+  <div class="bg-gradient-to-b from-red-700 to-black min-h-screen flex items-center justify-center">
     <UContainer>
       <div class="flex flex-col text-center">
         <template v-if="loading">
@@ -103,6 +105,12 @@ async function signOut() {
               />
 
               <UButton class="justify-center col-span-2" color="neutral" label="Settings" />
+              <UButton
+                class="justify-center col-span-2"
+                color="neutral"
+                label="Profile"
+                @click="showProfile"
+              />
 
               <UButton
                 @click="signOut"
