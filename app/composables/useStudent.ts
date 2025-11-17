@@ -1,9 +1,40 @@
 import type { Database } from '~/types/database.types'
 import { useCashier } from './useCashier'
-import { collapseTextChangeRangesAcrossMultipleVersions } from 'typescript'
 
 export function useStudent() {
   const { supabase, user, showError, showSuccess } = useCashier()
+
+  const checkStudentExists = async (student_number: string) => {
+    const { data } = await supabase
+      .from('students')
+      .select('student_number')
+      .eq('student_number', student_number)
+      .maybeSingle()
+
+    return !!data
+  }
+
+  const getStudentBalance = async (student_number: string) => {
+    const { data, error } = await supabase
+      .from('students')
+      .select('balance')
+      .eq('student_number', student_number)
+      .single()
+
+    if (error) throw error
+    return data.balance as number
+  }
+
+  const createWithdrawalRequest = async (payload: { student_number: string; amount: number }) => {
+    const { data, error } = await supabase
+      .from('withdrawal_requests')
+      .insert(payload)
+      .select()
+      .single()
+
+    if (error) throw error
+    return data
+  }
 
   async function fetchBalance(student_number: string) {
     const { data, error } = await supabase
@@ -204,11 +235,14 @@ export function useStudent() {
   return {
     getTransactions,
     fetchBalance,
+    getStudentBalance,
     purchase,
     refund,
     fetchStudentDetails,
+    createWithdrawalRequest,
     fetchAllStudents,
     recordTransaction,
+    checkStudentExists,
     getEnrollment,
   }
 }

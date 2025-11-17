@@ -5,6 +5,8 @@ import PurchaseForm from '~/components/cashier/PurchaseForm.vue'
 import RefundForm from '~/components/cashier/RefundForm.vue'
 import type { NavigationMenuItem } from '@nuxt/ui'
 import { ro } from '@nuxt/ui/runtime/locale/index.js'
+import WithdrawalRequestForm from '~/components/cashier/WithdrawalRequestForm.vue'
+import WithdrawalsTableView from '~/components/cashier/WithdrawalsTableView.vue'
 
 definePageMeta({ middleware: 'roles' })
 
@@ -48,6 +50,11 @@ const items = [
     icon: 'i-lucide-banknote-x',
     slot: 'refund',
   },
+  {
+    label: 'Withdraw',
+    icon: 'i-lucide-banknote-down',
+    slot: 'withdraw',
+  },
 ]
 const email = user.value?.email
 const created_at = user.value?.created_at
@@ -66,7 +73,7 @@ onBeforeMount(async () => {
 
 <template>
   <div class="min-h-screen bg-gradient-to-b from-red-700 to-black">
-    <UHeader >
+    <UHeader>
       <template #title>
         <UAvatar src="/img/logo.jpeg" />
       </template>
@@ -75,6 +82,13 @@ onBeforeMount(async () => {
 
       <template #right>
         <UColorModeButton />
+        <UModal>
+          <UButton icon="i-lucide-banknote-arrow-down" color="neutral" variant="ghost" size="lg" />
+
+          <template #content>
+            <WithdrawalsTableView />
+          </template>
+        </UModal>
 
         <!-- <UTooltip text="Open on GitHub" :kbds="['meta', 'G']">
           <UButton
@@ -100,6 +114,10 @@ onBeforeMount(async () => {
 
         <template #refund>
           <RefundForm />
+        </template>
+
+        <template #withdraw>
+          <WithdrawalRequestForm />
         </template>
       </UTabs>
     </div>

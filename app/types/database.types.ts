@@ -177,6 +177,9 @@ export type Database = {
           created_at: string | null
           date_of_birth: string | null
           email: string | null
+          enrollment_status:
+            | Database["public"]["Enums"]["enrollment_status"]
+            | null
           first_name: string
           gender: Database["public"]["Enums"]["gender"] | null
           id: string
@@ -190,6 +193,9 @@ export type Database = {
           created_at?: string | null
           date_of_birth?: string | null
           email?: string | null
+          enrollment_status?:
+            | Database["public"]["Enums"]["enrollment_status"]
+            | null
           first_name: string
           gender?: Database["public"]["Enums"]["gender"] | null
           id?: string
@@ -203,6 +209,9 @@ export type Database = {
           created_at?: string | null
           date_of_birth?: string | null
           email?: string | null
+          enrollment_status?:
+            | Database["public"]["Enums"]["enrollment_status"]
+            | null
           first_name?: string
           gender?: Database["public"]["Enums"]["gender"] | null
           id?: string
@@ -264,6 +273,47 @@ export type Database = {
           },
         ]
       }
+      withdrawal_requests: {
+        Row: {
+          amount: number
+          approved_at: string | null
+          id: number
+          notes: string | null
+          rejected_at: string | null
+          requested_at: string | null
+          status: string
+          student_number: string | null
+        }
+        Insert: {
+          amount: number
+          approved_at?: string | null
+          id?: never
+          notes?: string | null
+          rejected_at?: string | null
+          requested_at?: string | null
+          status?: string
+          student_number?: string | null
+        }
+        Update: {
+          amount?: number
+          approved_at?: string | null
+          id?: never
+          notes?: string | null
+          rejected_at?: string | null
+          requested_at?: string | null
+          status?: string
+          student_number?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "withdrawal_requests_student_number_fkey"
+            columns: ["student_number"]
+            isOneToOne: false
+            referencedRelation: "students"
+            referencedColumns: ["student_number"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -273,9 +323,17 @@ export type Database = {
     }
     Enums: {
       course: "Course A" | "Course B" | "Course C"
+      enrollment_status:
+        | "active"
+        | "inactive"
+        | "suspended"
+        | "graduated"
+        | "withdrawn"
+        | "expelled"
       gender: "male" | "female"
       section: "A" | "B" | "C"
-      transaction_type: "withraw" | "deposite" | "purchase" | "refund"
+      status: "pending" | "approved" | "rejected"
+      transaction_type: "withdraw" | "deposite" | "purchase" | "refund"
       year: "1" | "2" | "3" | "4"
     }
     CompositeTypes: {
@@ -405,9 +463,18 @@ export const Constants = {
   public: {
     Enums: {
       course: ["Course A", "Course B", "Course C"],
+      enrollment_status: [
+        "active",
+        "inactive",
+        "suspended",
+        "graduated",
+        "withdrawn",
+        "expelled",
+      ],
       gender: ["male", "female"],
       section: ["A", "B", "C"],
-      transaction_type: ["withraw", "deposite", "purchase", "refund"],
+      status: ["pending", "approved", "rejected"],
+      transaction_type: ["withdraw", "deposite", "purchase", "refund"],
       year: ["1", "2", "3", "4"],
     },
   },

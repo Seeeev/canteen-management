@@ -1,20 +1,21 @@
 <script setup lang="ts">
 import RegisterStudentForm from '~/components/admin/RegisterStudentForm.vue'
 import StudentTable from '~/components/admin/StudentTable.vue'
+import { useStudentBalance } from '~/composables/useStudentBalance'
 definePageMeta({
   layout: 'dashboard',
   middleware: 'roles',
 })
 
-const { deposit } = useAdmin()
+// const { deposit, withraw } = useAdmin()
 
-function onClickDeposit() {
-  deposit({ student_number: '0001', amount: 1 })
-}
+// function onClickDeposit() {
+//   withraw({ student_number: '0001', amount: 1 })
+// }
 
-function onClickWithraw() {
-  deposit({ student_number: '0001', amount: -1 })
-}
+// function onClickWithraw() {
+//   deposit({ student_number: '0001', amount: -1 })
+// }
 
 const email = ref('')
 const message = ref('')

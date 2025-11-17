@@ -24,6 +24,30 @@ const items: NavigationMenuItem[][] = [
       ],
     },
     {
+      label: 'Withrawal Requests',
+      icon: 'i-lucide-hand-coins',
+      // badge: '4',
+      to: '/admin/withdrawal-requests',
+    },
+    {
+      label: 'Student Balance',
+      icon: 'i-lucide-hand-coins',
+      // badge: '4',
+      to: '/admin/student-balance',
+    },
+    {
+      label: 'Reports',
+      icon: 'i-lucide-hand-coins',
+      // badge: '4',
+      to: '/admin/reports',
+    },
+    {
+      label: 'Disable Student',
+      icon: 'i-lucide-hand-coins',
+      // badge: '4',
+      to: '/admin/disable-student',
+    },
+    {
       label: 'Account Deletion',
       icon: 'i-lucide-user-x',
       // defaultOpen: true,
@@ -62,9 +86,9 @@ const items: NavigationMenuItem[][] = [
     <template #header="{ collapsed }">
       <!-- <UIcon v-if="collapsed" name="i-lucide-lightbulb" class="size-5" /> -->
       <!-- <UIcon name="i-simple-icons-nuxtdotjs" class="size-5 text-primary mx-auto" /> -->
-      <UIcon name="i-lucide-shield-user" class="size-14 mx-auto text-red-400"  />
+      <UIcon name="i-lucide-shield-user" class="size-14 mx-auto text-red-400" />
     </template>
 
-    <UNavigationMenu :items="items" orientation="vertical"  color="error"/>
+    <UNavigationMenu :items="items" orientation="vertical" color="error" />
   </UDashboardSidebar>
 </template>

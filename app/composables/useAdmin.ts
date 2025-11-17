@@ -69,7 +69,6 @@ export function useAdmin() {
   }
 
   async function registerCashier(cashier: CashierInput) {
-    
     // check if email already exist in cashier table
     const { data: email, error: emailError } = await supabase
       .from('cashiers')
@@ -165,75 +164,75 @@ export function useAdmin() {
 
     return new Date(year, month - 1, day) // month is 0-based
   }
-  async function deposit(options: { student_number: string; amount: number }) {
-    if (options.amount < 0) {
-      showError('Amount should be positive integers only!')
-      return
-    }
-    // get currentBalance
-    const { error: selectError, data: selectData } = await supabase
-      .from('students')
-      .select('*')
-      .eq('student_number', options.student_number)
-      .maybeSingle()
-    if (selectError) {
-      showError(selectError.message)
-      return
-    } else if (!selectData) {
-      showError('No student found')
-      return
-    }
-    // add the amount to current balance
-    const { data, error } = await supabase
-      .from('students')
-      .update({ balance: (selectData.balance ?? 0) + options.amount })
-      .eq('student_number', selectData.student_number)
-    if (error) {
-      showError(error.message)
-      return
-    }
-    showSuccess('Balance updated!')
-  }
+  // async function deposit(options: { student_number: string; amount: number }) {
+  //   if (options.amount < 0) {
+  //     showError('Amount should be positive integers only!')
+  //     return
+  //   }
+  //   // get currentBalance
+  //   const { error: selectError, data: selectData } = await supabase
+  //     .from('students')
+  //     .select('*')
+  //     .eq('student_number', options.student_number)
+  //     .maybeSingle()
+  //   if (selectError) {
+  //     showError(selectError.message)
+  //     return
+  //   } else if (!selectData) {
+  //     showError('No student found')
+  //     return
+  //   }
+  //   // add the amount to current balance
+  //   const { data, error } = await supabase
+  //     .from('students')
+  //     .update({ balance: (selectData.balance ?? 0) + options.amount })
+  //     .eq('student_number', selectData.student_number)
+  //   if (error) {
+  //     showError(error.message)
+  //     return
+  //   }
+  //   showSuccess('Balance updated!')
+  // }
 
-  async function withraw(options: { student_number: string; amount: number }) {
-    if (options.amount < 0) {
-      showError('Amount should be positive integers only!')
-      return
-    }
-    // get student details
-    const { error: selectError, data: selectData } = await supabase
-      .from('students')
-      .select('*')
-      .eq('student_number', options.student_number)
-      .maybeSingle()
-    if (selectError) {
-      showError(selectError.message)
-      return
-    } else if (!selectData) {
-      showError('No student found')
-      return
-    }
+  // async function withraw(options: { student_number: string; amount: number }) {
+  //   if (options.amount < 0) {
+  //     showError('Amount should be positive integers only!')
+  //     return
+  //   }
+  //   // get student details
+  //   const { error: selectError, data: selectData } = await supabase
+  //     .from('students')
+  //     .select('*')
+  //     .eq('student_number', options.student_number)
+  //     .maybeSingle()
+  //   if (selectError) {
+  //     showError(selectError.message)
+  //     return
+  //   } else if (!selectData) {
+  //     showError('No student found')
+  //     return
+  //   }
 
-    // withraw amount if its greater than current balance
-    if (selectData.balance == null) {
-      showError('Balance is empty!')
-      return
-    }
-    if (selectData.balance < options.amount) {
-      showError('Balance not enough!')
-      return
-    }
+  //   // withraw amount if its greater than current balance
+  //   if (selectData.balance == null) {
+  //     showError('Balance is empty!')
+  //     return
+  //   }
+  //   if (selectData.balance < options.amount) {
+  //     showError('Balance not enough!')
+  //     return
+  //   }
 
-    const { data, error } = await supabase
-      .from('students')
-      .update({ balance: (selectData.balance ?? 0) - options.amount })
-      .eq('student_number', selectData.student_number)
-    if (error) {
-      showError(error.message)
-      return
-    }
-    showSuccess('Balance updated!')
-  }
+  //   const { data, error } = await supabase
+  //     .from('students')
+  //     .update({ balance: (selectData.balance ?? 0) - options.amount })
+  //     .eq('student_number', selectData.student_number)
+  //   if (error) {
+  //     showError(error.message)
+  //     return
+  //   }
+  //   showSuccess('Balance updated!')
+  // }
 
   async function deleteStudent(student_number: string) {
     // check if there is balance first before deleting student
@@ -276,9 +275,10 @@ export function useAdmin() {
     registerCashier,
     registerStudent,
     showError,
+    showSuccess,
     Cashier,
-    deposit,
-    withraw,
+    // deposit,
+    // withraw,
     TransactionSchema,
     UserRole,
   }

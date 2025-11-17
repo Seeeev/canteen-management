@@ -2,7 +2,7 @@
 import StudentTable from '~/components/admin/StudentTable.vue'
 definePageMeta({
   layout: 'dashboard',
-  middleware: 'roles',
+  middleware: ['roles', 'check-disabled'],
 })
 
 const user = useSupabaseUser()
