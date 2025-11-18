@@ -132,7 +132,7 @@ async function confirmRequest() {
 
       <!-- Modal content -->
       <template #content>
-        <div class="p-6 bg-white rounded-lg shadow-md space-y-4">
+        <div class="rounded-lg shadow-md space-y-4">
           <h2 class="text-xl font-bold">Confirm Withdrawal</h2>
           <p>
             Student ID: <strong>{{ withdrawalState.student_number }}</strong>

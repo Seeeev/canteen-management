@@ -25,44 +25,44 @@ const items: NavigationMenuItem[][] = [
     },
     {
       label: 'Withrawal Requests',
-      icon: 'i-lucide-hand-coins',
+      icon: 'i-lucide-account-cards',
       // badge: '4',
       to: '/admin/withdrawal-requests',
     },
     {
       label: 'Student Balance',
-      icon: 'i-lucide-hand-coins',
+      icon: 'i-lucide-balance',
       // badge: '4',
       to: '/admin/student-balance',
     },
     {
       label: 'Reports',
-      icon: 'i-lucide-hand-coins',
+      icon: 'i-lucide-library',
       // badge: '4',
       to: '/admin/reports',
     },
     {
       label: 'Disable Student',
-      icon: 'i-lucide-hand-coins',
+      icon: 'i-lucide-shield-ban',
       // badge: '4',
       to: '/admin/disable-student',
     },
-    {
-      label: 'Account Deletion',
-      icon: 'i-lucide-user-x',
-      // defaultOpen: true,
-      // children: [
-      //   {
-      //     label: 'General',
-      //   },
-      //   {
-      //     label: 'Members',
-      //   },
-      //   {
-      //     label: 'Notifications',
-      //   },
-      // ],
-    },
+    // {
+    //   label: 'Account Deletion',
+    //   icon: 'i-lucide-user-x',
+    //   // defaultOpen: true,
+    //   // children: [
+    //   //   {
+    //   //     label: 'General',
+    //   //   },
+    //   //   {
+    //   //     label: 'Members',
+    //   //   },
+    //   //   {
+    //   //     label: 'Notifications',
+    //   //   },
+    //   // ],
+    // },
   ],
   [
     {
